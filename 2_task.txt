@@ -1,0 +1,27 @@
+2.1. How many tons worth of fruit does an average seller have?
+Не совсем понял задание, я так подозреваю, что тут имеется ввиду, что сколько тонн фруктов осталось у селлера после того, 
+как у него купили клиенты. То есть, как я понимаю, запрос, сколько сейчас в данный момент времени у селлера фруктов.
+Решение: группирую по seller_info.seller_id. Соединяем 2 таблицы LEFT JOIN, так как будут селлеры у которых ничего не купили, и у них на складе остался товар.
+Суммирую consumption_info.quantity_purchased_fruit, чтобы узнать сколько в сумме купили у каждого селлера. Отнимаю от того сколько было и сколько было куплено.
+Был момент с Null при LEFT JOIN, добавил функцию COALESCE, чтобы Null заменить на 0.
+ 
+
+SELECT seller_info.seller_id, seller_info.fruit_weight,
+sum(consumption_info.quantity_purchased_fruit) as purchased,
+(seller_info.fruit_weight-sum(COALESCE(consumption_info.quantity_purchased_fruit,0))) as Fruits_tons
+from seller_info
+LEFT JOIN consumption_info
+ON consumption_info.seller_id = seller_info.seller_id
+GROUP by seller_info.seller_id
+ORDER by seller_info.seller_id
+
+Решение-скриншот- https://prnt.sc/onwrxg-VK5n6
+
+
+2.2. How many sellers have at least one client who purchased their fruit?
+Cначала группируем по селлеру, так как у селлера могут купить более одного раза. Получаем таблицу количество селлеров и количество покупок.
+Далее, считаем их функцией count()
+
+Select count(*)  From(
+SELECT seller_id,count(seller_id) from consumption_info
+GROUP By seller_id) as count_sellers
