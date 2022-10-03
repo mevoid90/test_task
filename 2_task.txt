@@ -11,7 +11,7 @@ sum(consumption_info.quantity_purchased_fruit) as purchased,
 (seller_info.fruit_weight-sum(COALESCE(consumption_info.quantity_purchased_fruit,0))) as Fruits_tons
 from seller_info
 LEFT JOIN consumption_info
-ON consumption_info.seller_id = seller_info.seller_id
+ON seller_info.seller_id=consumption_info.seller_id
 GROUP by seller_info.seller_id
 ORDER by seller_info.seller_id
 
