@@ -1,0 +1,4 @@
+P(wife or husband)=P(husband)+P(wife)-P(wife and husband)
+P(wife)=P(wife or husband)+P(wife and husband)-P(husband)
+P(wife)=0.21+0.1–0.15
+P(wife)=0.16
